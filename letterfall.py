@@ -20,7 +20,7 @@ max_area = 350          # Groups with more pixels than this will not be affected
 vel_std = 200           # Standard deviation of velocity components
 angvel_std = 100        # Standard deviation of angular velocity
 
-split = (img != bg_color).any(axis = 2).astype("u1") # 0 for bg pixels, 1 for fg pixels
+split = (np.abs(img-bg_color).sum(axis = 2) > 10).astype("u1")
 n, labels, stats, centers = cv2.connectedComponentsWithStats(split, 4, cv2.CV_32S)
 letters = []
 
@@ -42,8 +42,8 @@ for x, y, w, h, area in stats:
             np.random.normal(0, angvel_std)  # Angular velocity
         ])
 
-fps = 60                     # Output framerate
-dur = 5                      # Output duration
+fps = 30                     # Output framerate
+dur = 2                      # Output duration
 gravity = np.array((0, 300)) # Gravitational force vector
 dt = 1/fps
 
